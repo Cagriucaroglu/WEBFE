@@ -42,9 +42,9 @@ export const UserService = {
         }
     },
 
-    getCoachById: async (id: number): Promise<UserForUpdate> => {
+    getUserById: async (id: number): Promise<UserForUpdate> => {
         try{
-            const response: AxiosResponse<any> = await axios.get(`${BASE_URL}coachInfos/GetById/${id}`)
+            const response: AxiosResponse<any> = await axios.get(`${BASE_URL}GetById/${id}`)
             return response.data.responseData
         }
         catch(error){

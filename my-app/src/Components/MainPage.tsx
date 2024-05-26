@@ -8,23 +8,34 @@ import { UserForUpdate } from '../Statics/User';
 export default function MainPage() {
     const location = useLocation();
     const { username, email , password , userId} = location.state || {};
-    const [updatedUserName, setUpdatedUserName] = useState<string>();
+    const [updatedUserName, setUpdatedUserName] = useState<string>("");
     const [updatedPassword, setUpdatedPassword] = useState<string>();
     const [updatedEmail   , setUpdatedEmail]    = useState<string>();
     const [isSuccess , setIsSuccess]            = useState<boolean>();
     const [isSubmitted , setIsSubmitted]        = useState<boolean>(false);
+    const [userID   , setUserID]                = useState<number>();
 
     useEffect(() => {
+        if(!userId){
+            findIdFn();
+        }
+    },[])
 
-    }, [])
+    const findIdFn = async () => {
+        const response = await UserService.getUsers();
+        const user = response.find(r => r.customerUserName == username && r.password == password);
+        if(!!user){
+            setUserID(user.customerId);
+        }
+    }
 
     const handleSubmit = async (event: any) => {
         setIsSubmitted(!isSubmitted);
         event.preventDefault();
-            if(!!updatedPassword && updatedPassword && updatedEmail){
+            if(!!updatedPassword && !!updatedPassword && !!updatedEmail){
                 const userforupdate: UserForUpdate = {
-                    customerId: userId,
-                    customerUserName: updatedEmail,
+                    customerId: !!userId ? userId : userID,
+                    customerUserName: updatedUserName,
                     email: updatedEmail,
                     password: updatedPassword
                 }
@@ -42,7 +53,7 @@ export default function MainPage() {
         <>
 
             <div className='loginpage'>
-                <div className='userandicon'>{username}{userId}<AccountCircleRoundedIcon className='icon'/></div>
+                <div className='userandicon'>{username}<AccountCircleRoundedIcon className='icon'/></div>
                 {/* <h1>HEALTH CENTER</h1>
          <h2>{pathName === 'Loginstudent' ? 'Student Login' : 'Coach Login'}</h2> */}
                 <form className='loginpageform'>

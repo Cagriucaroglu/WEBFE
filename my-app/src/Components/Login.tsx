@@ -29,6 +29,7 @@ export default function Login() {
                 if(response.length > 0){
                     const canItlog = IsPermittedToLogU(response);
                     setIsLogging(canItlog);
+                    console.log(canItlog,"canıtlog")
                 }
                 console.log(response , "our response");
             }
@@ -38,7 +39,7 @@ export default function Login() {
       };
 
     const IsPermittedToLogU = (userdatas: UserForUpdate[]):boolean => {
-        const matchedUser = userdatas.find((val) => val.email === username && val.password === password);
+        const matchedUser = userdatas.find((val) => val.customerUserName === username && val.password === password);
         if(matchedUser){  
             setUserId(matchedUser.customerId);
             setEmail(matchedUser.email);
